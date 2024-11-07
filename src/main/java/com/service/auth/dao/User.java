@@ -1,57 +1,58 @@
 package com.service.auth.dao;
 
-import com.service.auth.dto.UserRole;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
 @Entity
 @Table(name="users")
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of = "id")
+@Builder
 public class User implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
-
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false)
-    private String name;
+    @Getter
+    private Integer id;
 
-    @Column(nullable = false, unique = true)
+    @Getter
+    @Setter
+    @Column(nullable = false)
+    private String fullName;
+
+    @Getter
+    @Setter
+    @Column(unique = true, length = 100, nullable = false)
     private String email;
 
+    @Getter
+    @Setter
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
-    private UserRole role;
+    @CreationTimestamp
+    @Getter
+    @Column(updatable = false, name = "created_at")
+    private LocalDateTime createdAt;
 
-    public User(String name, String email, String password, UserRole role) {
-        this.name = name;
-        this.email = email;
-        this.password = password;
-        this.role = role;
-    }
+    @UpdateTimestamp
+    @Getter
+    @Setter
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<SimpleGrantedAuthority> roles = new ArrayList<>();
-        roles.add(new SimpleGrantedAuthority("ROLE_USER"));
-
-        if (this.role == UserRole.ADMIN) roles.add(new SimpleGrantedAuthority("ROLES_ADMIN"));
-
-        return roles;
+        return List.of();
     }
 
     @Override
