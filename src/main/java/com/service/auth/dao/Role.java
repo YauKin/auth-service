@@ -6,6 +6,7 @@ import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 
@@ -31,10 +32,12 @@ public class Role {
     private String description;
 
     @CreatedDate
-    @Column(updatable = false, name = "created_on")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Column(updatable = false, nullable = false, name = "created_on")
     private LocalDateTime createdOn;
 
     @LastModifiedDate
-    @Column(name = "modified_on")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Column(updatable = false, nullable = false, name = "modified_on")
     private LocalDateTime modifiedOn;
 }

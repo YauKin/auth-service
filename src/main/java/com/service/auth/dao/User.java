@@ -5,6 +5,7 @@ import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -37,11 +38,13 @@ public class User implements UserDetails {
     private String password;
 
     @CreatedDate
-    @Column(updatable = false, name = "created_on")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Column(updatable = false, name = "created_on", nullable = false)
     private LocalDateTime createdOn;
 
     @LastModifiedDate
-    @Column(name = "modified_on")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Column(updatable = false, name = "modified_on", nullable = false)
     private LocalDateTime modifiedOn;
 
     @ManyToOne(cascade = CascadeType.REMOVE)
