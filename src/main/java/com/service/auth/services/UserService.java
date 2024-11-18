@@ -1,6 +1,8 @@
 package com.service.auth.services;
 
 import com.service.auth.dao.User;
+import com.service.auth.dto.request.PromoteUserRequest;
+import com.service.auth.dto.response.PromoteUserResponse;
 import com.service.auth.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -19,5 +21,10 @@ public class UserService {
 
     public List<User> allUsers() {
         return new ArrayList<>(userRepository.findAll());
+    }
+
+    private PromoteUserResponse promoteUser(PromoteUserRequest request) {
+        //TODO: Check if user is already an admin or not found
+        return null;
     }
 }

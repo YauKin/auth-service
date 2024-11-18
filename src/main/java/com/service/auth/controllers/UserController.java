@@ -3,9 +3,11 @@ package com.service.auth.controllers;
 import com.service.auth.dao.User;
 import com.service.auth.services.UserService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,6 +23,7 @@ public class UserController {
     }
 
     @GetMapping("/me")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<User> authenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -30,9 +33,20 @@ public class UserController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN')")
     public ResponseEntity<List<User>> allUsers() {
         List <User> users = userService.allUsers();
 
         return ResponseEntity.ok(users);
+    }
+
+    @PostMapping
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN')")
+    public ResponseEntity<String> promoteUser(String username) {
+
+        // TODO: Implement role promotion logic
+//        userService.promoteUser(username, role);
+
+        return ResponseEntity.ok("User promoted successfully");
     }
 }

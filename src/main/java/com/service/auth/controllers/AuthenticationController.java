@@ -6,6 +6,7 @@ import com.service.auth.dto.request.RegisterUserDto;
 import com.service.auth.dto.response.LoginResponse;
 import com.service.auth.services.AuthenticationService;
 import com.service.auth.services.JwtService;
+import lombok.SneakyThrows;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,6 +25,7 @@ public class AuthenticationController {
         this.authenticationService = authenticationService;
     }
 
+    @SneakyThrows
     @PostMapping("/signup")
     public ResponseEntity<User> register(@RequestBody RegisterUserDto registerUserDto) {
         User registeredUser = authenticationService.signup(registerUserDto);
