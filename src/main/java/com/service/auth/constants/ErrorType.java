@@ -10,8 +10,10 @@ import org.springframework.http.HttpStatus;
 public enum ErrorType implements BaseEnum {
     NOT_SPECIFIED("NOT_SPECIFIED", HttpStatus.OK),
     INVALID_REQUEST("INVALID_REQUEST", HttpStatus.BAD_REQUEST),
+    UNEXPECTED_ERROR("UNEXPECTED_ERROR", HttpStatus.BAD_REQUEST),
 
     ROLE_NOT_FOUND("ROLE_NOT_FOUND", HttpStatus.BAD_REQUEST),
+    USER_NOT_FOUND("USER_NOT_FOUND", HttpStatus.BAD_REQUEST),
     SIGNUP_FAILED("SIGNUP_FAILED", HttpStatus.BAD_REQUEST),
     EMAIL_ALREADY_EXISTS("EMAIL_ALREADY_EXISTS", HttpStatus.BAD_REQUEST),
 

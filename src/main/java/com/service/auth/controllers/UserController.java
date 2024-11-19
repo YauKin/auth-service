@@ -1,15 +1,15 @@
 package com.service.auth.controllers;
 
 import com.service.auth.dao.User;
+import com.service.auth.dto.request.PromoteUserRequest;
+import com.service.auth.dto.response.PromoteUserResponse;
 import com.service.auth.services.UserService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -40,13 +40,12 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
-    @PostMapping
+    @PostMapping("/promote")
     @PreAuthorize("hasAnyRole('SUPER_ADMIN')")
-    public ResponseEntity<String> promoteUser(String username) {
+    public ResponseEntity<PromoteUserResponse> promoteUser(@RequestBody @Valid PromoteUserRequest request) throws Exception {
 
-        // TODO: Implement role promotion logic
-//        userService.promoteUser(username, role);
+        PromoteUserResponse response = userService.promoteUser(request);
 
-        return ResponseEntity.ok("User promoted successfully");
+        return ResponseEntity.ok(response);
     }
 }

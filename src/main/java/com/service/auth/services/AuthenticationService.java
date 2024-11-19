@@ -9,6 +9,7 @@ import com.service.auth.dto.request.RegisterUserDto;
 import com.service.auth.exceptions.FunctionalException;
 import com.service.auth.repositories.RoleRepository;
 import com.service.auth.repositories.UserRepository;
+import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,7 +18,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
+@AllArgsConstructor
 public class AuthenticationService {
+
     private final UserRepository userRepository;
 
     private final RoleRepository roleRepository;
@@ -25,20 +28,8 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
 
     private final AuthenticationManager authenticationManager;
-
     private static final Logger logger = LoggerFactory.getLogger(AuthenticationService.class);
 
-    public AuthenticationService(
-            UserRepository userRepository,
-            RoleRepository roleRepository,
-            AuthenticationManager authenticationManager,
-            PasswordEncoder passwordEncoder
-    ) {
-        this.roleRepository = roleRepository;
-        this.authenticationManager = authenticationManager;
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
 
     public User signup(RegisterUserDto input) throws FunctionalException {
         // Check for existing email or username

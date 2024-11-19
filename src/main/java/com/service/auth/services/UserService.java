@@ -1,30 +1,49 @@
 package com.service.auth.services;
 
+import com.service.auth.constants.ErrorType;
+import com.service.auth.constants.RoleEnum;
+import com.service.auth.constants.Status;
+import com.service.auth.dao.Role;
 import com.service.auth.dao.User;
 import com.service.auth.dto.request.PromoteUserRequest;
 import com.service.auth.dto.response.PromoteUserResponse;
+import com.service.auth.exceptions.FunctionalException;
 import com.service.auth.repositories.UserRepository;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @Service
+@Slf4j
+@AllArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
 
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    private final RoleService roleService;
+    private final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     public List<User> allUsers() {
         return new ArrayList<>(userRepository.findAll());
     }
 
-    private PromoteUserResponse promoteUser(PromoteUserRequest request) {
-        //TODO: Check if user is already an admin or not found
-        return null;
+    public PromoteUserResponse promoteUser(PromoteUserRequest request) throws Exception {
+        try {
+            User user = userRepository.findById(request.id()).orElseThrow(() -> new FunctionalException(ErrorType.USER_NOT_FOUND));
+            Role role = roleService.getRoleByName(RoleEnum.ADMIN);
+            user.setRole(role);
+            userRepository.save(user);
+            return new PromoteUserResponse(Status.SUCCESS);
+        } catch (FunctionalException e) {
+            logger.error("Functional error while promoting user", e);
+            throw e;
+        } catch (Exception e) {
+            logger.error("Unexpected error while promoting user", e);
+            throw new FunctionalException(ErrorType.UNEXPECTED_ERROR, e.getMessage());
+        }
     }
 }
