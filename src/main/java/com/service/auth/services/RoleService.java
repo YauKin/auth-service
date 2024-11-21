@@ -16,7 +16,7 @@ public class RoleService {
 
     private final RoleRepository roleRepository;
 
-    public Role getRoleByName(RoleEnum roleName) throws FunctionalException {
+    public Role getRoleByName(RoleEnum roleName) {
         return roleRepository.findByName(roleName).orElseThrow(() -> new FunctionalException(ErrorType.ROLE_NOT_FOUND));
     }
 
