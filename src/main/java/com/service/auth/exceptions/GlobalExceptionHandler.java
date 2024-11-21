@@ -2,8 +2,7 @@ package com.service.auth.exceptions;
 
 import com.service.auth.constants.ErrorType;
 import com.service.auth.dto.response.GeneralErrorResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,9 +15,8 @@ import java.lang.reflect.UndeclaredThrowableException;
 import java.util.Date;
 
 @RestControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
-
-    private final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleAllException(Exception ex, WebRequest request) {
@@ -32,7 +30,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 ? ((GeneralException) actualException).getType().getHttpStatus()
                 : HttpStatus.INTERNAL_SERVER_ERROR;
         // Log the exception
-        logger.error(ex.getMessage(), ex);
+        log.error(ex.getMessage(), ex);
         // Create a GeneralErrorResponse object
         GeneralErrorResponse errorResponse = createErrorResponse(actualException, status);
 

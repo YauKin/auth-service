@@ -4,7 +4,7 @@ import com.service.auth.constants.ErrorType;
 import lombok.Getter;
 
 @Getter
-public abstract class GeneralException extends Exception {
+public abstract class GeneralException extends RuntimeException {
     // Getter for type
     private final ErrorType type;
 

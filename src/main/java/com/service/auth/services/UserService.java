@@ -11,8 +11,6 @@ import com.service.auth.exceptions.FunctionalException;
 import com.service.auth.repositories.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -25,24 +23,26 @@ public class UserService {
     private final UserRepository userRepository;
 
     private final RoleService roleService;
-    private final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     public List<User> allUsers() {
         return new ArrayList<>(userRepository.findAll());
     }
 
-    public PromoteUserResponse promoteUser(PromoteUserRequest request) throws Exception {
+    public PromoteUserResponse promoteUser(PromoteUserRequest request) {
         try {
             User user = userRepository.findById(request.id()).orElseThrow(() -> new FunctionalException(ErrorType.USER_NOT_FOUND));
+            if (user.getRole().getName() != RoleEnum.USER) {
+                throw new FunctionalException(ErrorType.USER_ALREADY_ADMIN);
+            }
             Role role = roleService.getRoleByName(RoleEnum.ADMIN);
             user.setRole(role);
             userRepository.save(user);
             return new PromoteUserResponse(Status.SUCCESS);
         } catch (FunctionalException e) {
-            logger.error("Functional error while promoting user", e);
+            log.error("Functional error while promoting user", e);
             throw e;
         } catch (Exception e) {
-            logger.error("Unexpected error while promoting user", e);
+            log.error("Unexpected error while promoting user", e);
             throw new FunctionalException(ErrorType.UNEXPECTED_ERROR, e.getMessage());
         }
     }

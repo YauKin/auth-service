@@ -10,14 +10,14 @@ import com.service.auth.exceptions.FunctionalException;
 import com.service.auth.repositories.RoleRepository;
 import com.service.auth.repositories.UserRepository;
 import lombok.AllArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 @AllArgsConstructor
 public class AuthenticationService {
 
@@ -28,7 +28,6 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
 
     private final AuthenticationManager authenticationManager;
-    private static final Logger logger = LoggerFactory.getLogger(AuthenticationService.class);
 
 
     public User signup(RegisterUserDto input) throws FunctionalException {
@@ -47,7 +46,7 @@ public class AuthenticationService {
         try {
             return userRepository.save(signUpUser);
         } catch (Exception e) {
-            logger.error("Error while signing up user", e);
+            log.error("Error while signing up user", e);
             throw new FunctionalException(ErrorType.SIGNUP_FAILED);
         }
     }
