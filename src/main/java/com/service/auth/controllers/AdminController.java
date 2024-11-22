@@ -22,8 +22,8 @@ public class AdminController {
     private final UserService userService;
 
     @PreAuthorize("hasAnyRole('SUPER_ADMIN')")
-    @PostMapping("/signup")
-    public ResponseEntity<User> register(@RequestBody @Valid RegisterUserDto registerUserDto) {
+    @PostMapping("/createAdminUser")
+    public ResponseEntity<User> createAdminUser(@RequestBody @Valid RegisterUserDto registerUserDto) {
         return ResponseEntity.ok(userService.signupAdminUser(registerUserDto));
     }
 
