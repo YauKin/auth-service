@@ -22,7 +22,7 @@ public class AdminController {
     private final UserService userService;
 
     @PreAuthorize("hasAnyRole('SUPER_ADMIN')")
-    @PostMapping("/createAdminUser")
+    @PostMapping("/create")
     public ResponseEntity<User> createAdminUser(@RequestBody @Valid RegisterUserDto registerUserDto) {
         return ResponseEntity.ok(userService.signupAdminUser(registerUserDto));
     }
